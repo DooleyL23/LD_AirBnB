@@ -13,9 +13,11 @@ def get_logo_b64():
         return base64.b64encode(f.read()).decode()
 logo_b64 = get_logo_b64()
  
+ 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Airbnb Amsterdam",
+    page_icon="🏠",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -189,7 +191,10 @@ df = load_data()
 col_title, col_toggle = st.columns([6, 1])
 with col_title:
     st.markdown(
-        '<h1 class="dashboard-title">🏠 <span>Airbnb Amsterdam — Data Analysis</span></h1>',
+        f'<div style="display:flex;align-items:center;gap:1rem;">'  
+        f'<img src="data:image/png;base64,{logo_b64}" style="height:60px;width:auto;">'  
+        f'<p class="dashboard-title" style="margin:0;">Airbnb Amsterdam — Data Analysis</p>'  
+        f'</div>',
         unsafe_allow_html=True,
     )
 with col_toggle:
