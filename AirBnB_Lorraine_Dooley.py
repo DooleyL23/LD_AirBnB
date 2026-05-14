@@ -59,7 +59,7 @@ st.markdown(f"""
       color: {AIRBNB_RED};
       margin: 0;
   }}
-  .dashboard-title span {{ color: {text_col}; }}
+  .dashboard-title span {{ color: {AIRBNB_RED}; }}
   .dashboard-title h1 {{ color:{AIRBNB_RED}; }}
   .metric-card {{
       background: {card_bg};
