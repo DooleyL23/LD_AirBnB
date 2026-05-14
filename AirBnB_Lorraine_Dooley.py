@@ -4,7 +4,7 @@ import numpy as np
 from pathlib import Path
 
 DATA_PATH = Path(__file__).parent / "BigML_Dataset_airBnB.csv"
- 
+
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Airbnb Amsterdam",
@@ -12,7 +12,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
- 
 # ── Theme toggle ──────────────────────────────────────────────────────────────
 if "dark_mode" not in st.session_state:
     st.session_state.dark_mode = False
@@ -105,7 +104,7 @@ st.markdown(f"""
       z-index: 2;
   }}
   .stTabs [data-baseweb="tab"]:not([aria-selected="true"]):hover {{
-      background: #484848 !important;
+      background: {AIRBNB_DARK} !important;
       color: #fff !important;
   }}
   .section-heading {{
@@ -161,28 +160,28 @@ st.markdown(
 @st.cache_data
 def load_data() -> pd.DataFrame:
     df = pd.read_csv(DATA_PATH)
- 
+
     # Fix European decimal separators in lat/lon
     df["latitude"]  = df["latitude"].astype(str).str.replace(",", ".").astype(float)
     df["longitude"] = df["longitude"].astype(str).str.replace(",", ".").astype(float)
- 
+
     # Boolean columns
     df["host_is_superhost"] = df["host_is_superhost"].map({"t": True, "f": False})
     df["instant_bookable"]  = df["instant_bookable"].map({"t": True, "f": False})
- 
+
     # Drop extreme price outliers (keep 1st–99th percentile)
     p1, p99 = df["price"].quantile(0.01), df["price"].quantile(0.99)
     df = df[(df["price"] >= p1) & (df["price"] <= p99)]
- 
+
     return df
- 
+
 df = load_data()
- 
+
 # ── Header ────────────────────────────────────────────────────────────────────
 col_title, col_toggle = st.columns([6, 1])
 with col_title:
     st.markdown(
-        '<p class="dashboard-title">🏠 <span>Airbnb Amsterdam — Data Analysis</span></p>',
+        '<h1 class="dashboard-title">🏠 <span>Airbnb Amsterdam — Data Analysis</span></h1>',
         unsafe_allow_html=True,
     )
 with col_toggle:
@@ -190,14 +189,14 @@ with col_toggle:
     if st.button(label, use_container_width=True):
         st.session_state.dark_mode = not dark
         st.rerun()
- 
+
 st.markdown("---")
- 
+
 # ── Tabs ──────────────────────────────────────────────────────────────────────
 tab_overview, tab_neighbourhoods, tab_map, tab_rooms = st.tabs(
-    ["  Overview", "  Neighbourhoods", "  Map", "  Room Types"]
+    ["📊 Overview", "🏘️ Neighbourhoods", "🗺️ Map", "🛏️ Room Types"]
 )
- 
+
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 1 — Overview
 # ─────────────────────────────────────────────────────────────────────────────
