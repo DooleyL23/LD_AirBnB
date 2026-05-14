@@ -207,12 +207,12 @@ with tab_overview:
     superhost_pct = df["host_is_superhost"].mean() * 100
     avg_avail     = df["availability_365"].mean()
 
-    k1, k2, k3, k5 = st.columns(4)
+    k1, k2, k3, k4 = st.columns(4)
     for col, val, label in [
         (k1, f"€{avg_price:.0f}",      "Avg Nightly Price"),
         (k2, f"{total_list:,}",         "Total Listings"),
         (k3, f"{avg_rating:.1f}/100",   "Avg Review Score"),
-        (k5, f"{avg_avail:.0f} days",   "Avg Availability/yr"),
+        (k4, f"{avg_avail:.0f} days",   "Avg Availability/yr"),
     ]:
         with col:
             st.markdown(
