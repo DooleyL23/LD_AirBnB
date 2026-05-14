@@ -4,7 +4,7 @@ import numpy as np
 from pathlib import Path
 
 DATA_PATH = Path(__file__).parent / "BigML_Dataset_airBnB.csv"
-LOGO_PATH = Path(__file__).parent / "airbnb_logo.png"
+LOGO_PATH = Path(__file__).parent / "airbnb__logo.png"
 
 
 import base64
