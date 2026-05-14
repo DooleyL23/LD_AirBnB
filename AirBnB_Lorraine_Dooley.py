@@ -45,7 +45,7 @@ st.markdown(f"""
       font-family: 'Segoe UI', system-ui, sans-serif;
   }}
   .dashboard-title {{
-      font-size: 30px;
+      font-size: 60px;
       font-weight: 700;
       color: {MINTY_GREEN};
       margin: 0;
