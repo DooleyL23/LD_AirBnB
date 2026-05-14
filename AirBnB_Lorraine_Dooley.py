@@ -64,7 +64,7 @@ st.markdown(f"""
       color: {AIRBNB_RED};
   }}
   .metric-label {{
-      font-size: 0.8rem;
+      font-size: 1.2rem;
       color: {sub_col};
       margin-top: 3px;
   }}
