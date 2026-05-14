@@ -126,7 +126,7 @@ df = load_data()
 col_title, col_toggle = st.columns([6, 1])
 with col_title:
     st.markdown(
-        '<p class="dashboard-title">🏠 <span>Airbnb Amsterdam — Data Analysis</span></p>',
+        '<h1 class="dashboard-title">🏠 <span>Airbnb Amsterdam — Data Analysis</span></h1>',
         unsafe_allow_html=True,
     )
 with col_toggle:
