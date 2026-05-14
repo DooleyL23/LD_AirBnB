@@ -16,7 +16,7 @@ st.set_page_config(
 # ── Theme toggle ──────────────────────────────────────────────────────────────
 if "dark_mode" not in st.session_state:
     st.session_state.dark_mode = False
-
+ 
 # ── Palette (Minty-inspired) ──────────────────────────────────────────────────
 AIRBNB_RED   = "#FF385C"
 AIRBNB_DARK  = "#222222"
@@ -91,7 +91,7 @@ st.markdown(f"""
       border: none;
       border-radius: 0;
       margin: 0;
-      clip-path: polygon(18px 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 18px 100%, 0 50%);
+      clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%, 18px 50%);
       transition: background 0.2s, color 0.2s;
       z-index: 1;
   }}
@@ -154,6 +154,7 @@ st.markdown(
     '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css">',
     unsafe_allow_html=True,
 )
+ 
 
 # ── Data loading & cleaning ───────────────────────────────────────────────────
 @st.cache_data
