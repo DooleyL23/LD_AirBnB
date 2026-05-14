@@ -75,11 +75,15 @@ st.markdown(f"""
       padding: 4px;
       gap: 4px;
       border: 1px solid {border};
+      display: flex;
+      width: 100%;
   }}
   .stTabs [data-baseweb="tab"] {{
       border-radius: 8px;
       color: {sub_col};
       font-weight: 500;
+      flex: 1;
+      justify-content: center;
   }}
   .stTabs [aria-selected="true"] {{
       background: {MINTY_GREEN} !important;
