@@ -12,7 +12,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
-
 # ── Theme toggle ──────────────────────────────────────────────────────────────
 if "dark_mode" not in st.session_state:
     st.session_state.dark_mode = False
@@ -117,6 +116,8 @@ st.markdown(f"""
       padding-left: 0.6rem;
   }}
   header[data-testid="stHeader"] {{ display: none; }}
+  .stTabs [data-baseweb="tab-highlight"] {{ display: none; }}
+  .stTabs [data-baseweb="tab-border"] {{ display: none; }}
   /* Font Awesome icons on tabs via ::before */
   .stTabs [data-baseweb="tab"]:nth-child(1) p::before {{
       font-family: "Font Awesome 6 Free";
@@ -155,7 +156,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
  
-
 # ── Data loading & cleaning ───────────────────────────────────────────────────
 @st.cache_data
 def load_data() -> pd.DataFrame:
