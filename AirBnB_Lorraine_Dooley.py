@@ -65,7 +65,7 @@ st.markdown(f"""
       color: {MINTY_GREEN};
   }}
   .metric-label {{
-      font-size: 18px;
+      font-size: 28px;
       color: {sub_col};
       margin-top: 3px;
   }}
