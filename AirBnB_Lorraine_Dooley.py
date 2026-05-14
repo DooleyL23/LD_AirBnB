@@ -86,7 +86,7 @@ st.markdown(f"""
       color: {sub_col};
       font-weight: 600;
       font-size: 30px;
-      padding: 0.75rem 1.5rem;
+      padding: 1.5rem 1.5rem;
       border: none;
       border-radius: 0;
       margin: 0;
