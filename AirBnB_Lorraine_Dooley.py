@@ -18,22 +18,23 @@ if "dark_mode" not in st.session_state:
     st.session_state.dark_mode = False
 
 # ── Palette (Minty-inspired) ──────────────────────────────────────────────────
-MINTY_GREEN  = "#78C2AD"
-MINTY_ACCENT = "#F3969A"
-MINTY_YELLOW = "#FFCE67"
-MINTY_BLUE   = "#6CC3D5"
-MINTY_PURPLE = "#8A6BD8"
-SEQ_SCALE    = [[0, MINTY_BLUE], [0.5, MINTY_GREEN], [1, MINTY_ACCENT]]
-CAT_COLORS   = [MINTY_GREEN, MINTY_ACCENT, MINTY_YELLOW, MINTY_BLUE, MINTY_PURPLE,
-                "#FF8C69", "#A8D8B9", "#C9B8E8"]
-
+AIRBNB_RED   = "#FF385C"
+AIRBNB_DARK  = "#222222"
+AIRBNB_GRAY  = "#F7F7F7"
+AIRBNB_PINK  = "#FF8CA0"
+AIRBNB_SOFT  = "#FFB3BF"
+SEQ_SCALE    = [[0, "#FFB3BF"], [0.5, "#FF385C"], [1, "#222222"]]
+CAT_COLORS   = [AIRBNB_RED, "#484848", AIRBNB_PINK, "#767676",
+                AIRBNB_SOFT, "#222222", "#FF6B80", "#AAAAAA"]
+ 
 dark = st.session_state.dark_mode
-bg        = "#1A2821" if dark else "#F8FBF9"
-card_bg   = "#243328" if dark else "#FFFFFF"
-text_col  = "#E2F0EC" if dark else "#2D4A3E"
-sub_col   = "#8ABFB0" if dark else "#6C8F82"
-border    = "#2E4A3C" if dark else "#D4EDE6"
+bg        = "#1A1A1A" if dark else AIRBNB_GRAY
+card_bg   = "#2A2A2A" if dark else "#FFFFFF"
+text_col  = "#F7F7F7" if dark else AIRBNB_DARK
+sub_col   = "#AAAAAA" if dark else "#484848"
+border    = "#444444" if dark else "#DDDDDD"
 plot_tmpl = "plotly_dark" if dark else "plotly_white"
+
 map_style = "carto-darkmatter" if dark else "carto-positron"
 
 # ── CSS ───────────────────────────────────────────────────────────────────────
@@ -47,7 +48,7 @@ st.markdown(f"""
   .dashboard-title {{
       font-size: 60px;
       font-weight: 700;
-      color: {MINTY_GREEN};
+      color: {AIRBNB_RED};
       margin: 0;
   }}
   .dashboard-title span {{ color: {text_col}; }}
@@ -62,7 +63,7 @@ st.markdown(f"""
   .metric-value {{
       font-size: 48px;
       font-weight: 700;
-      color: {MINTY_GREEN};
+      color: {AIRBNB_RED};
   }}
   .metric-label {{
       font-size: 28px;
@@ -87,7 +88,7 @@ st.markdown(f"""
       font-sixe:30px!important;
   }}
   .stTabs [aria-selected="true"] {{
-      background: {MINTY_GREEN} !important;
+      background: {AIRBNB_RED} !important;
       color: #fff !important;
       
   }}
@@ -100,7 +101,7 @@ st.markdown(f"""
       font-weight: 600;
       color: {text_col};
       margin: 1rem 0 0.4rem;
-      border-left: 4px solid {MINTY_GREEN};
+      border-left: 4px solid {AIRBNB_RED};
       padding-left: 0.6rem;
   }}
   header[data-testid="stHeader"] {{ display: none; }}
