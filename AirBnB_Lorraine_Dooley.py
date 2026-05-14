@@ -60,7 +60,7 @@ st.markdown(f"""
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }}
   .metric-value {{
-      font-size: 18px;
+      font-size: 48px;
       font-weight: 700;
       color: {MINTY_GREEN};
   }}
@@ -90,7 +90,7 @@ st.markdown(f"""
       color: #fff !important;
   }}
   .section-heading {{
-      font-size: 1rem;
+      font-size: 30px;
       font-weight: 600;
       color: {text_col};
       margin: 1rem 0 0.4rem;
