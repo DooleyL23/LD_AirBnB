@@ -212,7 +212,6 @@ with tab_overview:
         (k1, f"€{avg_price:.0f}",      "Avg Nightly Price"),
         (k2, f"{total_list:,}",         "Total Listings"),
         (k3, f"{avg_rating:.1f}/100",   "Avg Review Score"),
-        (k4, f"{superhost_pct:.0f}%",   "Superhost Listings"),
         (k5, f"{avg_avail:.0f} days",   "Avg Availability/yr"),
     ]:
         with col:
