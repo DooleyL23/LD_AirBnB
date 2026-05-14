@@ -16,7 +16,6 @@ logo_b64 = get_logo_b64()
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Airbnb Amsterdam",
-    page_icon="🏠",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
