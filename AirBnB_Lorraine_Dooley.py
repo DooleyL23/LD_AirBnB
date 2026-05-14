@@ -34,9 +34,8 @@ text_col  = "#F7F7F7" if dark else AIRBNB_DARK
 sub_col   = "#AAAAAA" if dark else "#484848"
 border    = "#444444" if dark else "#DDDDDD"
 plot_tmpl = "plotly_dark" if dark else "plotly_white"
-
 map_style = "carto-darkmatter" if dark else "carto-positron"
-
+ 
 # ── CSS ───────────────────────────────────────────────────────────────────────
 st.markdown(f"""
 <style>
@@ -46,7 +45,7 @@ st.markdown(f"""
       font-family: 'Segoe UI', system-ui, sans-serif;
   }}
   .dashboard-title {{
-      font-size: 60px;
+      font-size: 1.85rem;
       font-weight: 700;
       color: {AIRBNB_RED};
       margin: 0;
@@ -61,43 +60,56 @@ st.markdown(f"""
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }}
   .metric-value {{
-      font-size: 48px;
+      font-size: 1.9rem;
       font-weight: 700;
       color: {AIRBNB_RED};
   }}
   .metric-label {{
-      font-size: 28px;
+      font-size: 0.8rem;
       color: {sub_col};
       margin-top: 3px;
   }}
+  /* ── Chevron tab strip ── */
   .stTabs [data-baseweb="tab-list"] {{
-      background: {card_bg};
-      border-radius: 10px;
-      padding: 4px;
-      gap: 4px;
-      border: 1px solid {border};
+      background: transparent;
+      border: none;
+      padding: 0;
+      gap: 0;
       display: flex;
       width: 100%;
+      overflow: visible !important;
   }}
   .stTabs [data-baseweb="tab"] {{
-      border-radius: 8px;
-      color: {sub_col};
-      font-weight: 500;
+      position: relative;
       flex: 1;
       justify-content: center;
-      font-sixe:30px!important;
+      background: {border};
+      color: {sub_col};
+      font-weight: 600;
+      font-size: 30px;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0;
+      margin: 0;
+      clip-path: polygon(18px 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 18px 100%, 0 50%);
+      transition: background 0.2s, color 0.2s;
+      z-index: 1;
+  }}
+  .stTabs [data-baseweb="tab"] p {{
+      font-size: 30px !important;
+      font-weight: 600;
   }}
   .stTabs [aria-selected="true"] {{
       background: {AIRBNB_RED} !important;
       color: #fff !important;
-      
+      z-index: 2;
   }}
-  .stTabs [data-baseweb="tab"] p {{
-      font-size: 30px !important;
-      font-weight: 500;
+  .stTabs [data-baseweb="tab"]:not([aria-selected="true"]):hover {{
+      background: {AIRBNB_PINK} !important;
+      color: #fff !important;
   }}
   .section-heading {{
-      font-size: 30px;
+      font-size: 1rem;
       font-weight: 600;
       color: {text_col};
       margin: 1rem 0 0.4rem;
@@ -105,8 +117,43 @@ st.markdown(f"""
       padding-left: 0.6rem;
   }}
   header[data-testid="stHeader"] {{ display: none; }}
+  /* Font Awesome icons on tabs via ::before */
+  .stTabs [data-baseweb="tab"]:nth-child(1) p::before {{
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      content: "\f080  ";
+      color: white;
+  }}
+  .stTabs [data-baseweb="tab"]:nth-child(2) p::before {{
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      content: "\f015  ";
+      color: white;
+  }}
+  .stTabs [data-baseweb="tab"]:nth-child(3) p::before {{
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      content: "\f279  ";
+      color: white;
+  }}
+  .stTabs [data-baseweb="tab"]:nth-child(4) p::before {{
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      content: "\f236  ";
+      color: white;
+  }}
+  /* Make unselected tab icons match tab text colour */
+  .stTabs [data-baseweb="tab"]:not([aria-selected="true"]) p::before {{
+      color: {sub_col};
+  }}
 </style>
 """, unsafe_allow_html=True)
+ 
+# ── Font Awesome ──────────────────────────────────────────────────────────────
+st.markdown(
+    '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css">',
+    unsafe_allow_html=True,
+)
 
 # ── Data loading & cleaning ───────────────────────────────────────────────────
 @st.cache_data
