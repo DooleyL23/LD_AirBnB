@@ -4,7 +4,15 @@ import numpy as np
 from pathlib import Path
 
 DATA_PATH = Path(__file__).parent / "BigML_Dataset_airBnB.csv"
+LOGO_PATH = Path(__file__).parent / "airbnb_logo.png"
 
+
+import base64
+def get_logo_b64():
+    with open(LOGO_PATH, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+logo_b64 = get_logo_b64()
+ 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Airbnb Amsterdam",
@@ -12,6 +20,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+ 
 # ── Theme toggle ──────────────────────────────────────────────────────────────
 if "dark_mode" not in st.session_state:
     st.session_state.dark_mode = False
