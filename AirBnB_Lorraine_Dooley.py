@@ -45,7 +45,7 @@ st.markdown(f"""
       font-family: 'Segoe UI', system-ui, sans-serif;
   }}
   .dashboard-title {{
-      font-size: 1.85rem;
+      font-size: 30px;
       font-weight: 700;
       color: {MINTY_GREEN};
       margin: 0;
@@ -60,12 +60,12 @@ st.markdown(f"""
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }}
   .metric-value {{
-      font-size: 1.9rem;
+      font-size: 18px;
       font-weight: 700;
       color: {MINTY_GREEN};
   }}
   .metric-label {{
-      font-size: 0.8rem;
+      font-size: 18px;
       color: {sub_col};
       margin-top: 3px;
   }}
