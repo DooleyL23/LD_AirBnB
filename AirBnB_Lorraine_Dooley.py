@@ -84,11 +84,12 @@ st.markdown(f"""
       font-weight: 500;
       flex: 1;
       justify-content: center;
+      font-sixe:30px!important;
   }}
   .stTabs [aria-selected="true"] {{
       background: {MINTY_GREEN} !important;
       color: #fff !important;
-      font-sixe:30px!important;
+      
   }}
   .section-heading {{
       font-size: 30px;
