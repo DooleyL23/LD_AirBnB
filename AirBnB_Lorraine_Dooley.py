@@ -104,7 +104,7 @@ st.markdown(f"""
       z-index: 2;
   }}
   .stTabs [data-baseweb="tab"]:not([aria-selected="true"]):hover {{
-      background: {AIRBNB_PINK} !important;
+      background: {AIRBNB_DARK} !important;
       color: #fff !important;
   }}
   .section-heading {{
