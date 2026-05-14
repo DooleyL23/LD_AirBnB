@@ -193,7 +193,7 @@ with col_title:
     st.markdown(
         f'<div style="display:flex;align-items:center;gap:1rem;">'  
         f'<img src="data:image/png;base64,{logo_b64}" style="height:60px;width:auto;">'  
-        f'<p class="dashboard-title" style="margin:0;">Airbnb Amsterdam — Data Analysis</p>'  
+        f'<H1 class="dashboard-title" style="margin:0;">Airbnb Amsterdam — Data Analysis</h1>'  
         f'</div>',
         unsafe_allow_html=True,
     )
