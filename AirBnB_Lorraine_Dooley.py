@@ -91,6 +91,10 @@ st.markdown(f"""
       color: #fff !important;
       
   }}
+  .stTabs [data-baseweb="tab"] p {{
+      font-size: 30px !important;
+      font-weight: 500;
+  }}
   .section-heading {{
       font-size: 30px;
       font-weight: 600;
