@@ -265,34 +265,34 @@ with c2:
             color_continuous_scale=["#ffd5d6", "#FF5A5F", "#c0392b"],
             text="Count"
         )
-    fig_prop.update_traces(textposition="outside", textfont_size=11)
-    fig_prop.update_layout(
-            showlegend=False, coloraxis_showscale=False,
-            plot_bgcolor="white", paper_bgcolor="white",
-            margin=dict(l=0, r=60, t=10, b=0), height=250,
-            xaxis=dict(showgrid=False, visible=False),
-            yaxis=dict(showgrid=False, title=""),
-            font=dict(family="DM Sans")
-        )
-    st.plotly_chart(fig_prop, use_container_width=True)    
+fig_prop.update_traces(textposition="outside", textfont_size=11)
+fig_prop.update_layout(
+    showlegend=False, coloraxis_showscale=False,
+    plot_bgcolor="white", paper_bgcolor="white",
+    margin=dict(l=0, r=60, t=10, b=0), height=250,
+    xaxis=dict(showgrid=False, visible=False),
+    yaxis=dict(showgrid=False, title=""),
+    font=dict(family="DM Sans")
+)
+st.plotly_chart(fig_prop, use_container_width=True)    
 
-    st.markdown('<p class="section-header">Price Distribution</p>', unsafe_allow_html=True)
-    fig_hist = px.histogram(
-        filtered[filtered["price_num"] < 500], x="price_num", nbins=60,
-        color="room_type",
-        color_discrete_sequence=["#FF5A5F", "#1a1a2e", "#9ca3af"],
-        labels={"price_num": "Price per night (€)", "room_type": "Room type"},
-        barmode="overlay", opacity=0.8
-    )
-    fig_hist.update_layout(
-        plot_bgcolor="white", paper_bgcolor="white",
-        margin=dict(l=0, r=0, t=10, b=0), height=280,
-        xaxis=dict(showgrid=False, title="Price per night (€)"),
-        yaxis=dict(showgrid=True, gridcolor="#f0f0f0", title="Count"),
-        legend=dict(orientation="h", yanchor="bottom", y=1, xanchor="right", x=1),
-        font=dict(family="DM Sans")
-    )
-    st.plotly_chart(fig_hist, use_container_width=True)
+st.markdown('<p class="section-header">Price Distribution</p>', unsafe_allow_html=True)
+fig_hist = px.histogram(
+    filtered[filtered["price_num"] < 500], x="price_num", nbins=60,
+    color="room_type",
+    color_discrete_sequence=["#FF5A5F", "#1a1a2e", "#9ca3af"],
+    labels={"price_num": "Price per night (€)", "room_type": "Room type"},
+    barmode="overlay", opacity=0.8
+)
+fig_hist.update_layout(
+    plot_bgcolor="white", paper_bgcolor="white",
+    margin=dict(l=0, r=0, t=10, b=0), height=280,
+    xaxis=dict(showgrid=False, title="Price per night (€)"),
+    yaxis=dict(showgrid=True, gridcolor="#f0f0f0", title="Count"),
+    legend=dict(orientation="h", yanchor="bottom", y=1, xanchor="right", x=1),
+    font=dict(family="DM Sans")
+)
+st.plotly_chart(fig_hist, use_container_width=True)
 
         
      
