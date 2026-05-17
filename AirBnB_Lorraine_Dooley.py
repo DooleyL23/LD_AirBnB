@@ -241,7 +241,7 @@ with tab_overview:
 c1, c2 = st.columns([1, 1.2])
 
 with c1:
-    st.markdown('<p class="section-header">Room Type Distribution</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-header">Room Type</p>', unsafe_allow_html=True)
     room_counts = df["room_type"].value_counts().reset_index()
     room_counts.columns = ["Room Type", "Count"]
     fig_room = px.pie(
