@@ -259,7 +259,7 @@ with c2:
    st.markdown('<p class="section-header">Property Types</p>', unsafe_allow_html=True)
    prop_counts = df["property_type"].value_counts().head(6).reset_index()
    prop_counts.columns = ["Property Type", "Count"]
-        fig_prop = px.bar(
+   fig_prop = px.bar(
             prop_counts, x="Count", y="Property Type", orientation="h",
             color="Count",
             color_continuous_scale=["#ffd5d6", "#FF5A5F", "#c0392b"],
@@ -294,6 +294,7 @@ with c2:
     )
     st.plotly_chart(fig_hist, use_container_width=True)
 
+        
      
 
 # ─────────────────────────────────────────────────────────────────────────────
