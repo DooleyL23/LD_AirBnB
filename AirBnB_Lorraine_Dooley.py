@@ -239,7 +239,7 @@ with tab_overview:
 
 c1, c2 = st.columns([1, 1.2])
 
-    with c1:
+with c1:
         st.markdown('<p class="section-header">Room Type Distribution</p>', unsafe_allow_html=True)
         room_counts = df["room_type"].value_counts().reset_index()
         room_counts.columns = ["Room Type", "Count"]
@@ -255,7 +255,7 @@ c1, c2 = st.columns([1, 1.2])
         )
         st.plotly_chart(fig_room, use_container_width=True)
 
-    with c2:
+with c2:
         st.markdown('<p class="section-header">Property Types</p>', unsafe_allow_html=True)
         prop_counts = df["property_type"].value_counts().head(6).reset_index()
         prop_counts.columns = ["Property Type", "Count"]
