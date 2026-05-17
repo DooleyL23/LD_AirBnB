@@ -237,7 +237,7 @@ with tab_overview:
                 unsafe_allow_html=True,
             )
 
-  c1, c2 = st.columns([1, 1.2])
+c1, c2 = st.columns([1, 1.2])
 
     with c1:
         st.markdown('<p class="section-header">Room Type Distribution</p>', unsafe_allow_html=True)
