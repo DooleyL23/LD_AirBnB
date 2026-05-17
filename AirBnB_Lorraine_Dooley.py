@@ -279,10 +279,10 @@ st.plotly_chart(fig_prop, use_container_width=True)
 
 st.markdown('<p class="section-header">Price Distribution</p>', unsafe_allow_html=True)
 fig_hist = px.histogram(
-    filtered[filtered["price_num"] < 500], x="price_num", nbins=60,
+    df[df["price"] < 500], x="price_num", nbins=60,
     color="room_type",
     color_discrete_sequence=["#FF5A5F", "#1a1a2e", "#9ca3af"],
-    labels={"price_num": "Price per night (€)", "room_type": "Room type"},
+    labels={"price": "Price per night (€)", "room_type": "Room type"},
     barmode="overlay", opacity=0.8
 )
 fig_hist.update_layout(
