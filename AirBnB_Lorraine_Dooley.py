@@ -240,25 +240,25 @@ with tab_overview:
 c1, c2 = st.columns([1, 1.2])
 
 with c1:
-        st.markdown('<p class="section-header">Room Type Distribution</p>', unsafe_allow_html=True)
-        room_counts = df["room_type"].value_counts().reset_index()
-        room_counts.columns = ["Room Type", "Count"]
-        fig_room = px.pie(
-            room_counts, values="Count", names="Room Type",
-            color_discrete_sequence=["#FF5A5F", "#1a1a2e", "#6b7280"],
-            hole=0.55
-        )
-        fig_room.update_traces(textinfo="percent+label", textfont_size=11)
-        fig_room.update_layout(
-            showlegend=False, margin=dict(l=0, r=0, t=10, b=0),
-            paper_bgcolor="white", height=250, font=dict(family="DM Sans")
-        )
-        st.plotly_chart(fig_room, use_container_width=True)
+    st.markdown('<p class="section-header">Room Type Distribution</p>', unsafe_allow_html=True)
+    room_counts = df["room_type"].value_counts().reset_index()
+    room_counts.columns = ["Room Type", "Count"]
+    fig_room = px.pie(
+      room_counts, values="Count", names="Room Type",
+      color_discrete_sequence=["#FF5A5F", "#1a1a2e", "#6b7280"],
+      hole=0.55
+     )
+    fig_room.update_traces(textinfo="percent+label", textfont_size=11)
+    fig_room.update_layout(
+       showlegend=False, margin=dict(l=0, r=0, t=10, b=0),
+       paper_bgcolor="white", height=250, font=dict(family="DM Sans")
+      )
+    st.plotly_chart(fig_room, use_container_width=True)
 
 with c2:
-        st.markdown('<p class="section-header">Property Types</p>', unsafe_allow_html=True)
-        prop_counts = df["property_type"].value_counts().head(6).reset_index()
-        prop_counts.columns = ["Property Type", "Count"]
+   st.markdown('<p class="section-header">Property Types</p>', unsafe_allow_html=True)
+   prop_counts = df["property_type"].value_counts().head(6).reset_index()
+   prop_counts.columns = ["Property Type", "Count"]
         fig_prop = px.bar(
             prop_counts, x="Count", y="Property Type", orientation="h",
             color="Count",
@@ -294,7 +294,7 @@ with c2:
     )
     st.plotly_chart(fig_hist, use_container_width=True)
 
-
+     
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 2 — Neighbourhood
