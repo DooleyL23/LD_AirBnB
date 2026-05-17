@@ -265,8 +265,8 @@ with c2:
             color_continuous_scale=["#ffd5d6", "#FF5A5F", "#c0392b"],
             text="Count"
         )
-        fig_prop.update_traces(textposition="outside", textfont_size=11)
-        fig_prop.update_layout(
+    fig_prop.update_traces(textposition="outside", textfont_size=11)
+    fig_prop.update_layout(
             showlegend=False, coloraxis_showscale=False,
             plot_bgcolor="white", paper_bgcolor="white",
             margin=dict(l=0, r=60, t=10, b=0), height=250,
@@ -274,7 +274,7 @@ with c2:
             yaxis=dict(showgrid=False, title=""),
             font=dict(family="DM Sans")
         )
-        st.plotly_chart(fig_prop, use_container_width=True)
+    st.plotly_chart(fig_prop, use_container_width=True)    
 
     st.markdown('<p class="section-header">Price Distribution</p>', unsafe_allow_html=True)
     fig_hist = px.histogram(
