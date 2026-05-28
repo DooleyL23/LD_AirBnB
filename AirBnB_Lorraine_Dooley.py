@@ -30,7 +30,6 @@ if "active_tab" not in st.session_state: st.session_state.active_tab = 0
 AIRBNB_RED  = "#FF385C"
 AIRBNB_DARK = "#222222"
 AIRBNB_GRAY = "#F7F7F7"
-AIRBNB_PINK = "#FF8CA0"
 
 dark  = st.session_state.dark_mode
 large = st.session_state.large_text
@@ -41,7 +40,6 @@ text_col = "#F7F7F7" if dark else "#111111"
 sub_col  = "#CCCCCC" if dark else "#333333"
 border   = "#555555" if dark else "#CCCCCC"
 plot_bg  = "#2A2A2A" if dark else "#FFFFFF"
-map_style = "carto-darkmatter" if dark else "carto-positron"
 
 # ── Text sizes ────────────────────────────────────────────────────────────────
 base_body     = "1.15rem" if large else "1rem"
@@ -77,33 +75,51 @@ st.markdown(f"""
       margin: 0;
   }}
 
-  /* ── Tab buttons — style every st.button in the tab strip ── */
-  /* Each tab button sits inside a column with a unique data-testid we target via nth-child */
-  div[data-testid="column"] > div > div > div > div > button {{
-      height: auto !important;
-      padding: 0.8rem 0.4rem !important;
-      border-radius: 12px !important;
-      border: 2px solid {border} !important;
-      background: {card_bg} !important;
-      color: {sub_col} !important;
-      font-size: 0.88rem !important;
-      font-weight: 600 !important;
-      line-height: 1.4 !important;
-      white-space: pre-wrap !important;
-      transition: all 0.15s !important;
-  }}
-  div[data-testid="column"] > div > div > div > div > button:hover {{
-      border-color: {AIRBNB_RED} !important;
-      color: {AIRBNB_RED} !important;
-      background: {"#3A2020" if dark else "#FFF5F6"} !important;
+  /* ── Chevron tab strip wrapper ── */
+  .chevron-strip {{
+      display: flex;
+      width: 100%;
+      margin: 0.8rem 0 1.4rem;
+      gap: 0;
   }}
 
-  /* Active tab — highlighted in red */
-  div[data-testid="column"]:nth-child({active + 1}) > div > div > div > div > button {{
+  /* ── Individual chevron tab ── */
+  .chevron-tab {{
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 1rem 1.2rem 1rem 1.8rem;
+      background: {border};
+      color: {sub_col};
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 20px 50%);
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+      border: none;
+      outline: none;
+      text-decoration: none;
+  }}
+  .chevron-tab:first-child {{
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%);
+      padding-left: 1rem;
+  }}
+  .chevron-tab .tab-icon  {{ font-size: 1.3rem; }}
+  .chevron-tab .tab-label {{ font-size: 1rem; font-weight: 600; }}
+
+  .chevron-tab:hover {{
+      background: {AIRBNB_DARK} !important;
+      color: #fff !important;
+  }}
+  .chevron-tab.active {{
       background: {AIRBNB_RED} !important;
-      border-color: {AIRBNB_RED} !important;
-      color: #ffffff !important;
-      font-weight: 700 !important;
+      color: #fff !important;
+      font-weight: 700;
   }}
 
   /* ── Metric cards ── */
@@ -156,14 +172,20 @@ st.markdown(f"""
   #MainMenu {{ visibility: hidden; }}
   footer {{ visibility: hidden; }}
   [data-testid="manage-app-button"] {{ display: none !important; }}
+
+  /* ── Hide the real st.buttons used for click detection ── */
+  div[data-testid="stHorizontalBlock"] div[data-testid="stButton"] button {{
+      position: absolute !important;
+      opacity: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      top: 0 !important;
+      left: 0 !important;
+      cursor: pointer !important;
+      z-index: 10 !important;
+  }}
 </style>
 """, unsafe_allow_html=True)
-
-# ── Font Awesome ──────────────────────────────────────────────────────────────
-st.markdown(
-    '<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css">',
-    unsafe_allow_html=True,
-)
 
 # ── Data ──────────────────────────────────────────────────────────────────────
 @st.cache_data
@@ -206,13 +228,27 @@ with col_toggles:
 
 st.markdown("---")
 
-# ── Tab strip — one button per tab, labelled with icon + name + hint ──────────
-tab_cols = st.columns(N_TABS)
+# ── Chevron tab strip (HTML visual) + invisible st.buttons for clicks ─────────
+# Build the visual chevron strip
+chevron_html = '<div class="chevron-strip">'
 for i, (icon, label, hint) in enumerate(TABS):
-    with tab_cols[i]:
-        # Multi-line button label: icon on top, name, then hint
-        btn_label = f"{icon}\n{label}\n{hint}"
-        if st.button(btn_label, key=f"tab_{i}", use_container_width=True, help=hint):
+    cls = "chevron-tab active" if i == active else "chevron-tab"
+    first = ' style="clip-path: polygon(0 0, calc(100%% - 20px) 0, 100%% 50%%, calc(100%% - 20px) 100%%, 0 100%%); padding-left:1rem;"' if i == 0 else ""
+    chevron_html += (
+        f'<div class="{cls}" title="{hint}"{first}>'
+        f'  <span class="tab-icon">{icon}</span>'
+        f'  <span class="tab-label">{label}</span>'
+        f'</div>'
+    )
+chevron_html += '</div>'
+st.markdown(chevron_html, unsafe_allow_html=True)
+
+# Invisible st.buttons in a hidden row — these capture the actual clicks
+# We place them in a row then hide them visually via CSS, overlaid on the chevrons
+btn_cols = st.columns(N_TABS)
+for i, (icon, label, hint) in enumerate(TABS):
+    with btn_cols[i]:
+        if st.button(label, key=f"tab_{i}", use_container_width=True, help=hint):
             st.session_state.active_tab = i
             st.rerun()
 
@@ -354,21 +390,21 @@ if active == 0:
 # TAB 1 — Neighbourhoods
 # ─────────────────────────────────────────────────────────────────────────────
 elif active == 1:
-    st.info("Neighbourhood data.")
+    st.info("Neighbourhood data coming soon.")
     nav_buttons(1)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 2 — Map
 # ─────────────────────────────────────────────────────────────────────────────
 elif active == 2:
-    st.info("Map data.")
+    st.info("Map coming soon.")
     nav_buttons(2)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 3 — Room Types
 # ─────────────────────────────────────────────────────────────────────────────
 elif active == 3:
-    st.info("Room type data.")
+    st.info("Room type information coming soon.")
     nav_buttons(3)
 
 # ─────────────────────────────────────────────────────────────────────────────
