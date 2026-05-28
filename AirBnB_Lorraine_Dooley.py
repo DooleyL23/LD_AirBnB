@@ -22,16 +22,15 @@ st.set_page_config(
 )
 
 # ── Session state defaults ────────────────────────────────────────────────────
-if "dark_mode"   not in st.session_state: st.session_state.dark_mode   = False
-if "large_text"  not in st.session_state: st.session_state.large_text  = False
-if "active_tab"  not in st.session_state: st.session_state.active_tab  = 0
+if "dark_mode"  not in st.session_state: st.session_state.dark_mode  = False
+if "large_text" not in st.session_state: st.session_state.large_text = False
+if "active_tab" not in st.session_state: st.session_state.active_tab = 0
 
 # ── Palette ───────────────────────────────────────────────────────────────────
 AIRBNB_RED  = "#FF385C"
 AIRBNB_DARK = "#222222"
 AIRBNB_GRAY = "#F7F7F7"
 AIRBNB_PINK = "#FF8CA0"
-AIRBNB_SOFT = "#FFB3BF"
 
 dark  = st.session_state.dark_mode
 large = st.session_state.large_text
@@ -48,7 +47,6 @@ map_style = "carto-darkmatter" if dark else "carto-positron"
 base_body     = "1.15rem" if large else "1rem"
 metric_val_sz = "2.4rem"  if large else "2rem"
 metric_lbl_sz = "1.1rem"  if large else "0.95rem"
-tab_font_sz   = "1.1rem"  if large else "0.95rem"
 section_sz    = "1.1rem"  if large else "0.95rem"
 caption_sz    = "1rem"    if large else "0.85rem"
 
@@ -61,6 +59,7 @@ TABS = [
     ("❓", "Help & Glossary", "Plain-English guide to all terms"),
 ]
 N_TABS = len(TABS)
+active = st.session_state.active_tab
 
 # ── CSS ───────────────────────────────────────────────────────────────────────
 st.markdown(f"""
@@ -78,43 +77,34 @@ st.markdown(f"""
       margin: 0;
   }}
 
-  /* ── Custom tab strip ── */
-  .tab-strip {{
-      display: flex;
-      gap: 6px;
-      margin: 0.8rem 0 1.2rem;
-      flex-wrap: wrap;
+  /* ── Tab buttons — style every st.button in the tab strip ── */
+  /* Each tab button sits inside a column with a unique data-testid we target via nth-child */
+  div[data-testid="column"] > div > div > div > div > button {{
+      height: auto !important;
+      padding: 0.8rem 0.4rem !important;
+      border-radius: 12px !important;
+      border: 2px solid {border} !important;
+      background: {card_bg} !important;
+      color: {sub_col} !important;
+      font-size: 0.88rem !important;
+      font-weight: 600 !important;
+      line-height: 1.4 !important;
+      white-space: pre-wrap !important;
+      transition: all 0.15s !important;
   }}
-  .tab-btn {{
-      flex: 1;
-      min-width: 120px;
-      padding: 0.9rem 0.5rem 0.5rem;
-      border: 2px solid {border};
-      border-radius: 12px;
-      background: {card_bg};
-      color: {sub_col};
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      font-size: {tab_font_sz};
-      font-weight: 600;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.15s;
-      line-height: 1.3;
+  div[data-testid="column"] > div > div > div > div > button:hover {{
+      border-color: {AIRBNB_RED} !important;
+      color: {AIRBNB_RED} !important;
+      background: {"#3A2020" if dark else "#FFF5F6"} !important;
   }}
-  .tab-btn:hover {{
-      border-color: {AIRBNB_RED};
-      color: {AIRBNB_RED};
-      background: {"#3A2020" if dark else "#FFF5F6"};
+
+  /* Active tab — highlighted in red */
+  div[data-testid="column"]:nth-child({active + 1}) > div > div > div > div > button {{
+      background: {AIRBNB_RED} !important;
+      border-color: {AIRBNB_RED} !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
   }}
-  .tab-btn.active {{
-      background: {AIRBNB_RED};
-      border-color: {AIRBNB_RED};
-      color: #ffffff;
-      font-weight: 700;
-  }}
-  .tab-btn .tab-icon  {{ font-size: 1.5rem; display: block; margin-bottom: 4px; }}
-  .tab-btn .tab-label {{ font-size: {tab_font_sz}; display: block; }}
-  .tab-btn .tab-hint  {{ font-size: 0.78rem; display: block; opacity: 0.8; margin-top: 2px; }}
 
   /* ── Metric cards ── */
   .metric-card {{
@@ -149,28 +139,7 @@ st.markdown(f"""
       line-height: 1.5;
   }}
 
-  /* ── Next / Prev nav buttons ── */
-  .nav-btn {{
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0.75rem 1.8rem;
-      border-radius: 10px;
-      border: 2px solid {AIRBNB_RED};
-      background: {AIRBNB_RED};
-      color: #ffffff;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 1.5rem;
-  }}
-  .nav-btn-outline {{
-      background: transparent;
-      color: {AIRBNB_RED};
-  }}
-
-  /* ── Glossary / help box ── */
+  /* ── Glossary boxes ── */
   .help-box {{
       background: {card_bg};
       border: 1.5px solid {border};
@@ -187,7 +156,6 @@ st.markdown(f"""
   #MainMenu {{ visibility: hidden; }}
   footer {{ visibility: hidden; }}
   [data-testid="manage-app-button"] {{ display: none !important; }}
-  .stTabs {{ display: none; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -238,38 +206,23 @@ with col_toggles:
 
 st.markdown("---")
 
-# ── Custom tab strip ──────────────────────────────────────────────────────────
-active = st.session_state.active_tab
-
+# ── Tab strip — one button per tab, labelled with icon + name + hint ──────────
 tab_cols = st.columns(N_TABS)
 for i, (icon, label, hint) in enumerate(TABS):
     with tab_cols[i]:
-        cls = "active" if i == active else ""
-        # Render a visual-only label; actual click handled by st.button below
-        st.markdown(
-            f'<div class="tab-btn {cls}">'
-            f'  <span class="tab-icon">{icon}</span>'
-            f'  <span class="tab-label">{label}</span>'
-            f'  <span class="tab-hint">{hint}</span>'
-            f'</div>',
-            unsafe_allow_html=True,
-        )
-        # Invisible Streamlit button overlaid — handles the click
-        if st.button(label, key=f"tab_{i}", use_container_width=True,
-                     help=hint,
-                     type="primary" if i == active else "secondary"):
+        # Multi-line button label: icon on top, name, then hint
+        btn_label = f"{icon}\n{label}\n{hint}"
+        if st.button(btn_label, key=f"tab_{i}", use_container_width=True, help=hint):
             st.session_state.active_tab = i
             st.rerun()
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ── Helper: next / prev buttons ───────────────────────────────────────────────
+# ── Helper: Prev / Next nav ───────────────────────────────────────────────────
 def nav_buttons(current_idx: int):
-    """Render Previous / Next navigation at the bottom of each tab."""
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("---")
     prev_col, spacer, next_col = st.columns([2, 5, 2])
-
     if current_idx > 0:
         prev_icon, prev_label, _ = TABS[current_idx - 1]
         with prev_col:
@@ -279,7 +232,6 @@ def nav_buttons(current_idx: int):
                          help=f"Go back to {prev_label}"):
                 st.session_state.active_tab = current_idx - 1
                 st.rerun()
-
     if current_idx < N_TABS - 1:
         next_icon, next_label, _ = TABS[current_idx + 1]
         with next_col:
@@ -396,14 +348,13 @@ if active == 0:
         font=dict(family="Segoe UI", size=14, color=text_col),
     )
     st.plotly_chart(fig_hist, use_container_width=True)
-
     nav_buttons(0)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 1 — Neighbourhoods
 # ─────────────────────────────────────────────────────────────────────────────
 elif active == 1:
-    st.info("Neighbourhood data .")
+    st.info("Neighbourhood data.")
     nav_buttons(1)
 
 # ─────────────────────────────────────────────────────────────────────────────
