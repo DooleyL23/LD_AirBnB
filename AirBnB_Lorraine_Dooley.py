@@ -76,32 +76,36 @@ st.markdown(f"""
       margin: 0;
   }}
 
-  /* ── Tab buttons — style every st.button in the tab strip ── */
-  div[data-testid="column"] > div > div > div > div > button {{
+  /* ── Tab buttons — all inactive tabs ── */
+  button[kind="secondary"] {{
       height: auto !important;
       padding: 0.8rem 0.4rem !important;
       border-radius: 12px !important;
       border: 2px solid {border} !important;
       background: {card_bg} !important;
       color: {sub_col} !important;
-      font-size: 0.88rem !important;
+      font-size: 0.95rem !important;
       font-weight: 600 !important;
       line-height: 1.4 !important;
-      white-space: pre-wrap !important;
       transition: all 0.15s !important;
   }}
-  div[data-testid="column"] > div > div > div > div > button:hover {{
+  button[kind="secondary"]:hover {{
       border-color: {AIRBNB_RED} !important;
       color: {AIRBNB_RED} !important;
       background: {"#3A2020" if dark else "#FFF5F6"} !important;
   }}
 
-  /* Active tab — highlighted in red */
-  div[data-testid="column"]:nth-child({active + 1}) > div > div > div > div > button {{
+  /* ── Active tab — primary button styled red ── */
+  button[kind="primary"] {{
+      height: auto !important;
+      padding: 0.8rem 0.4rem !important;
+      border-radius: 12px !important;
+      border: 2px solid {AIRBNB_RED} !important;
       background: {AIRBNB_RED} !important;
-      border-color: {AIRBNB_RED} !important;
       color: #ffffff !important;
+      font-size: 0.95rem !important;
       font-weight: 700 !important;
+      line-height: 1.4 !important;
   }}
 
   /* ── Metric cards ── */
@@ -203,7 +207,9 @@ tab_cols = st.columns(N_TABS)
 for i, (icon, label, hint) in enumerate(TABS):
     with tab_cols[i]:
         btn_label = f"{icon} {label}"
-        if st.button(btn_label, key=f"tab_{i}", use_container_width=True, help=hint):
+        btn_type  = "primary" if i == active else "secondary"
+        if st.button(btn_label, key=f"tab_{i}", use_container_width=True,
+                     help=hint, type=btn_type):
             st.session_state.active_tab = i
             st.rerun()
 
