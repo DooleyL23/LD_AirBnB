@@ -390,21 +390,21 @@ if active == 0:
 # TAB 1 — Neighbourhoods
 # ─────────────────────────────────────────────────────────────────────────────
 elif active == 1:
-    st.info("Neighbourhood data coming soon.")
+    st.info("Neighbourhood data.")
     nav_buttons(1)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 2 — Map
 # ─────────────────────────────────────────────────────────────────────────────
 elif active == 2:
-    st.info("Map coming soon.")
+    st.info("Map data.")
     nav_buttons(2)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 3 — Room Types
 # ─────────────────────────────────────────────────────────────────────────────
 elif active == 3:
-    st.info("Room type information coming soon.")
+    st.info("Room type data.")
     nav_buttons(3)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -469,3 +469,4 @@ st.markdown(
     "</p>",
     unsafe_allow_html=True,
 )
+
