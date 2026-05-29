@@ -55,7 +55,6 @@ TABS = [
     ("🏘️", "Neighbourhoods",  "Explore areas of Amsterdam"),
     ("🗺️", "Map",             "See where listings are located"),
     ("🛏️", "Room Types",      "Compare types of accommodation"),
-    ("❓", "Help & Glossary", "Plain-English guide to all terms"),
 ]
 N_TABS = len(TABS)
 active = st.session_state.active_tab
@@ -368,59 +367,6 @@ elif active == 3:
     st.info("Room type information coming soon.")
     nav_buttons(3)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# TAB 4 — Help & Glossary
-# ─────────────────────────────────────────────────────────────────────────────
-elif active == 4:
-    st.markdown('<p class="section-heading">Help &amp; Glossary</p>', unsafe_allow_html=True)
-    st.markdown(
-        f'<p style="font-size:{base_body}; color:{sub_col}; margin-bottom:1.2rem;">'
-        "Not sure what a term means? Find plain-English explanations for everything on this dashboard below."
-        "</p>",
-        unsafe_allow_html=True,
-    )
-    glossary = [
-        ("Avg Nightly Price",
-         "The average cost of staying one night across all Amsterdam listings in this dataset."),
-        ("Total Listings",
-         "The total number of homes, apartments, and rooms available to book on Airbnb in Amsterdam."),
-        ("Avg Review Score",
-         "Guests leave a score out of 100 after their stay. A score above 90 means guests are very satisfied. "
-         "A score above 95 is outstanding."),
-        ("Avg Availability/yr",
-         "On average, how many days per year a listing is available to book. A higher number means the host "
-         "keeps the listing open for longer periods."),
-        ("Entire home/apt",
-         "You have the whole property to yourself — no shared spaces. Best for couples or anyone who values privacy."),
-        ("Private room",
-         "You have your own bedroom, but may share common areas such as the kitchen or living room with the host "
-         "or other guests."),
-        ("Shared room",
-         "You share a bedroom or open sleeping space with other guests. This is the most affordable option."),
-        ("Superhost",
-         "A superhost is an experienced, highly-rated Airbnb host who consistently receives excellent reviews "
-         "and responds quickly to guests."),
-        ("Instant Bookable",
-         "Some listings can be booked immediately without waiting for the host to approve your request. "
-         "These are marked as instant bookable."),
-        ("Review Score — Accuracy",
-         "Did the listing look the same as it did in the photos and description? A high score means no surprises."),
-        ("Review Score — Cleanliness",
-         "How clean guests found the property when they arrived."),
-        ("Review Score — Location",
-         "How guests rated the neighbourhood — things like transport links, nearby shops, and safety."),
-        ("Review Score — Value",
-         "Whether guests felt the price they paid was fair for what they received."),
-    ]
-    for term, definition in glossary:
-        st.markdown(
-            f'<div class="help-box">'
-            f'<div class="help-term">{term}</div>'
-            f'<div class="help-def">{definition}</div>'
-            f'</div>',
-            unsafe_allow_html=True,
-        )
-    nav_buttons(4)
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("---")
