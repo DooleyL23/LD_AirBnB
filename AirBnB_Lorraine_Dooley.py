@@ -494,13 +494,15 @@ elif active == 2:
     )
     fig_map.update_layout(
         margin=dict(l=0, r=0, t=0, b=0),
-        coloraxis_colorbar=dict(
+        paper_bgcolor=plot_bg,
+        font=dict(family="Segoe UI", size=13, color=text_col),
+    )
+    fig_map.update_coloraxes(
+        colorbar=dict(
             title="Price (€)",
             tickfont=dict(size=13, color=text_col),
             titlefont=dict(size=14, color=text_col),
-        ),
-        paper_bgcolor=plot_bg,
-        font=dict(family="Segoe UI", size=13, color=text_col),
+        )
     )
     st.plotly_chart(fig_map, use_container_width=True)
 
@@ -675,4 +677,3 @@ st.markdown(
     "</p>",
     unsafe_allow_html=True,
 )
-
