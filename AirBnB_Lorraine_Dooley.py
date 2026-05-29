@@ -475,7 +475,7 @@ elif active == 2:
         size_max=8,
         zoom=11,
         center={"lat": 52.3676, "lon": 4.9041},
-        mapbox_style=map_style,
+        mapbox_style="open-street-map",
         hover_data={
             "latitude": False,
             "longitude": False,
@@ -675,3 +675,4 @@ st.markdown(
     "</p>",
     unsafe_allow_html=True,
 )
+
