@@ -54,7 +54,7 @@ TABS = [
     ("📊", "Overview",        "Summary figures at a glance"),
     ("🏘️", "Neighbourhoods",  "Explore areas of Amsterdam"),
     ("🗺️", "Map",             "See where listings are located"),
-    ("🛏️", "Room Types",      "Compare types of accommodation"),
+    ("🛏️", "Room Types",      "Compare types of accommodation")
 ]
 N_TABS = len(TABS)
 active = st.session_state.active_tab
@@ -497,13 +497,7 @@ elif active == 2:
         paper_bgcolor=plot_bg,
         font=dict(family="Segoe UI", size=13, color=text_col),
     )
-    fig_map.update_coloraxes(
-        colorbar=dict(
-            title="Price (€)",
-            tickfont=dict(size=13, color=text_col),
-            titlefont=dict(size=14, color=text_col),
-        )
-    )
+
     st.plotly_chart(fig_map, use_container_width=True)
 
     nav_buttons(2)
@@ -667,6 +661,7 @@ elif active == 3:
     st.plotly_chart(fig_av, use_container_width=True)
 
     nav_buttons(3)
+
 
 
 # ── Footer ────────────────────────────────────────────────────────────────────
