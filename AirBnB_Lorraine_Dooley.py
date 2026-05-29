@@ -243,17 +243,72 @@ def nav_buttons(current_idx: int):
 # TAB 0 — Overview
 # ─────────────────────────────────────────────────────────────────────────────
 if active == 0:
-    avg_price  = df["price"].mean()
-    total_list = len(df)
-    avg_rating = df["review_scores_rating"].mean()
-    avg_avail  = df["availability_365"].mean()
+
+    # ── Filters ──────────────────────────────────────────────────────────────
+    st.markdown('<p class="section-heading">Filter Listings</p>', unsafe_allow_html=True)
+    st.markdown(
+        '<p class="chart-caption">Use the filters below to narrow down the listings. '
+        'All charts and figures on this page will update automatically.</p>',
+        unsafe_allow_html=True,
+    )
+
+    f1, f2, f3 = st.columns(3)
+
+    with f1:
+        room_options = ["All room types"] + sorted(df["room_type"].dropna().unique().tolist())
+        sel_room = st.selectbox(
+            "🛏️  Room type",
+            room_options,
+            help="Filter by the type of accommodation — entire home, private room, or shared room",
+        )
+
+    with f2:
+        prop_options = ["All property types"] + sorted(df["property_type"].dropna().unique().tolist())
+        sel_prop = st.selectbox(
+            "🏠  Property type",
+            prop_options,
+            help="Filter by the kind of property — apartment, house, bed & breakfast, and more",
+        )
+
+    with f3:
+        price_min = int(df["price"].min())
+        price_max = int(df["price"].quantile(0.99))
+        sel_price = st.slider(
+            "💶  Maximum price per night (€)",
+            min_value=price_min,
+            max_value=price_max,
+            value=price_max,
+            step=10,
+            help="Drag to hide listings above this nightly price",
+        )
+
+    # ── Apply filters ─────────────────────────────────────────────────────────
+    filtered_df = df.copy()
+    if sel_room != "All room types":
+        filtered_df = filtered_df[filtered_df["room_type"] == sel_room]
+    if sel_prop != "All property types":
+        filtered_df = filtered_df[filtered_df["property_type"] == sel_prop]
+    filtered_df = filtered_df[filtered_df["price"] <= sel_price]
+
+    st.markdown(
+        f'<p class="chart-caption">Showing <strong>{len(filtered_df):,}</strong> listings after filters.</p>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("---")
+
+    # ── Metric cards (update with filtered data) ───────────────────────────────
+    avg_price  = filtered_df["price"].mean()     if len(filtered_df) > 0 else 0
+    total_list = len(filtered_df)
+    avg_rating = filtered_df["review_scores_rating"].mean() if len(filtered_df) > 0 else 0
+    avg_avail  = filtered_df["availability_365"].mean()     if len(filtered_df) > 0 else 0
 
     k1, k2, k3, k4 = st.columns(4)
     cards = [
         (k1, f"€{avg_price:.0f}",    "Avg Nightly Price",
-         "The typical cost of one night in an Amsterdam listing."),
+         "The typical cost of one night based on your filters."),
         (k2, f"{total_list:,}",       "Total Listings",
-         "The number of homes and rooms available across Amsterdam."),
+         "The number of listings matching your current filters."),
         (k3, f"{avg_rating:.1f}/100", "Avg Review Score",
          "Guests rate stays out of 100. Anything above 90 is excellent."),
         (k4, f"{avg_avail:.0f} days", "Avg Availability/yr",
@@ -274,76 +329,87 @@ if active == 0:
     c1, c2 = st.columns([1, 1.2])
 
     with c1:
-        st.markdown('<p class="section-heading">Room Type</p>', unsafe_allow_html=True)
-        st.markdown('<p class="chart-caption">Shows the split between entire homes, private rooms, and shared rooms across all listings.</p>', unsafe_allow_html=True)
-        room_counts = df["room_type"].value_counts().reset_index()
+        st.markdown('<p class="section-heading">Room Type Breakdown</p>', unsafe_allow_html=True)
+        st.markdown('<p class="chart-caption">Shows the split between entire homes, private rooms, and shared rooms in your filtered results.</p>', unsafe_allow_html=True)
+        room_counts = filtered_df["room_type"].value_counts().reset_index()
         room_counts.columns = ["Room Type", "Count"]
-        fig_room = px.pie(
-            room_counts, values="Count", names="Room Type",
-            color_discrete_sequence=["#FF385C", "#333333", "#FF8CA0"],
-            hole=0.55,
-        )
-        fig_room.update_traces(textinfo="percent+label", textfont_size=14)
-        fig_room.update_layout(
-            showlegend=True,
-            legend=dict(font=dict(size=14), orientation="h", y=-0.15),
-            margin=dict(l=0, r=0, t=10, b=40),
-            paper_bgcolor=plot_bg, height=280,
-            font=dict(family="Segoe UI", size=14, color=text_col),
-        )
-        st.plotly_chart(fig_room, use_container_width=True)
+        if len(room_counts) > 0:
+            fig_room = px.pie(
+                room_counts, values="Count", names="Room Type",
+                color_discrete_sequence=["#FF385C", "#333333", "#FF8CA0"],
+                hole=0.55,
+            )
+            fig_room.update_traces(textinfo="percent+label", textfont_size=14)
+            fig_room.update_layout(
+                showlegend=True,
+                legend=dict(font=dict(size=14), orientation="h", y=-0.15),
+                margin=dict(l=0, r=0, t=10, b=40),
+                paper_bgcolor=plot_bg, height=280,
+                font=dict(family="Segoe UI", size=14, color=text_col),
+            )
+            st.plotly_chart(fig_room, use_container_width=True)
+        else:
+            st.info("No listings match your current filters.")
 
     with c2:
         st.markdown('<p class="section-heading">Property Types</p>', unsafe_allow_html=True)
-        st.markdown('<p class="chart-caption">The six most common property types in Amsterdam. Apartments make up the large majority.</p>', unsafe_allow_html=True)
-        prop_counts = df["property_type"].value_counts().head(6).reset_index()
+        st.markdown('<p class="chart-caption">The most common property types in your filtered results.</p>', unsafe_allow_html=True)
+        prop_counts = filtered_df["property_type"].value_counts().head(6).reset_index()
         prop_counts.columns = ["Property Type", "Count"]
-        fig_prop = px.bar(
-            prop_counts, x="Count", y="Property Type", orientation="h",
-            color="Count",
-            color_continuous_scale=["#FFB3BF", "#FF385C", "#C0392B"],
-            text="Count",
-        )
-        fig_prop.update_traces(textposition="outside", textfont_size=14)
-        fig_prop.update_layout(
-            showlegend=False, coloraxis_showscale=False,
-            plot_bgcolor=plot_bg, paper_bgcolor=plot_bg,
-            margin=dict(l=0, r=70, t=10, b=0), height=280,
-            xaxis=dict(showgrid=False, visible=False),
-            yaxis=dict(showgrid=False, title="", tickfont=dict(size=14, color=text_col)),
-            font=dict(family="Segoe UI", size=14, color=text_col),
-        )
-        st.plotly_chart(fig_prop, use_container_width=True)
+        if len(prop_counts) > 0:
+            fig_prop = px.bar(
+                prop_counts, x="Count", y="Property Type", orientation="h",
+                color="Count",
+                color_continuous_scale=["#FFB3BF", "#FF385C", "#C0392B"],
+                text="Count",
+            )
+            fig_prop.update_traces(textposition="outside", textfont_size=14)
+            fig_prop.update_layout(
+                showlegend=False, coloraxis_showscale=False,
+                plot_bgcolor=plot_bg, paper_bgcolor=plot_bg,
+                margin=dict(l=0, r=70, t=10, b=0), height=280,
+                xaxis=dict(showgrid=False, visible=False),
+                yaxis=dict(showgrid=False, title="", tickfont=dict(size=14, color=text_col)),
+                font=dict(family="Segoe UI", size=14, color=text_col),
+            )
+            st.plotly_chart(fig_prop, use_container_width=True)
+        else:
+            st.info("No listings match your current filters.")
 
     st.markdown('<p class="section-heading">Price Distribution</p>', unsafe_allow_html=True)
     st.markdown(
-        '<p class="chart-caption">Most listings in Amsterdam are priced between €50 and €200 per night. '
-        'Each colour represents a different room type. Use the legend to identify them.</p>',
+        '<p class="chart-caption">Shows how listings are spread across different price points. '
+        'Each colour represents a different room type.</p>',
         unsafe_allow_html=True,
     )
-    fig_hist = px.histogram(
-        df[df["price"] < 500], x="price", nbins=60,
-        color="room_type",
-        color_discrete_sequence=["#FF385C", "#333333", "#FF8CA0"],
-        labels={"price": "Price per night (€)", "room_type": "Room type"},
-        barmode="overlay", opacity=0.85,
-    )
-    fig_hist.update_layout(
-        plot_bgcolor=plot_bg, paper_bgcolor=plot_bg,
-        margin=dict(l=0, r=0, t=10, b=0), height=300,
-        xaxis=dict(showgrid=False, title="Price per night (€)",
-                   title_font=dict(size=14, color=text_col),
-                   tickfont=dict(size=13, color=text_col)),
-        yaxis=dict(showgrid=True,
-                   gridcolor="#E0E0E0" if not dark else "#3A3A3A",
-                   title="Number of listings",
-                   title_font=dict(size=14, color=text_col),
-                   tickfont=dict(size=13, color=text_col)),
-        legend=dict(orientation="h", yanchor="bottom", y=1, xanchor="right", x=1,
-                    font=dict(size=14, color=text_col), title_text="Room type"),
-        font=dict(family="Segoe UI", size=14, color=text_col),
-    )
-    st.plotly_chart(fig_hist, use_container_width=True)
+    hist_df = filtered_df[filtered_df["price"] <= sel_price]
+    if len(hist_df) > 0:
+        fig_hist = px.histogram(
+            hist_df, x="price", nbins=60,
+            color="room_type",
+            color_discrete_sequence=["#FF385C", "#333333", "#FF8CA0"],
+            labels={"price": "Price per night (€)", "room_type": "Room type"},
+            barmode="overlay", opacity=0.85,
+        )
+        fig_hist.update_layout(
+            plot_bgcolor=plot_bg, paper_bgcolor=plot_bg,
+            margin=dict(l=0, r=0, t=10, b=0), height=300,
+            xaxis=dict(showgrid=False, title="Price per night (€)",
+                       title_font=dict(size=14, color=text_col),
+                       tickfont=dict(size=13, color=text_col)),
+            yaxis=dict(showgrid=True,
+                       gridcolor="#E0E0E0" if not dark else "#3A3A3A",
+                       title="Number of listings",
+                       title_font=dict(size=14, color=text_col),
+                       tickfont=dict(size=13, color=text_col)),
+            legend=dict(orientation="h", yanchor="bottom", y=1, xanchor="right", x=1,
+                        font=dict(size=14, color=text_col), title_text="Room type"),
+            font=dict(family="Segoe UI", size=14, color=text_col),
+        )
+        st.plotly_chart(fig_hist, use_container_width=True)
+    else:
+        st.info("No listings match your current filters.")
+
     nav_buttons(0)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -662,8 +728,6 @@ elif active == 3:
 
     nav_buttons(3)
 
-
-
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("---")
 st.markdown(
@@ -672,3 +736,4 @@ st.markdown(
     "</p>",
     unsafe_allow_html=True,
 )
+
